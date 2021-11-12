@@ -86,9 +86,12 @@ How to uncommit the commit happened by mistake..The following cmd changes the br
 
 How to push the file changes to git repo for that,we need to bind the github repo to local folder in your pc.
 
-> for this repo github repo link is https://github.com/chaitanyantr/BravoProject
+> for this repo github repo link is https://github.com/chaitanyantr/Project_Bravo
 
-> git remote add origin https://github.com/chaitanyantr/BravoProject
+> git remote add origin https://github.com/chaitanyantr/Project_Bravo
+
+undo remote origin
+> git remote remove origin
 
 Now comes the final magic wand command to push the files
 

@@ -112,7 +112,7 @@ You can check the git full documentation here: [https://rubygarage.org/blog/most
 
 1. Clone this repo.
 
-> git clone https://github.com/chaitanyantr/BravoProject
+> git clone https://github.com/chaitanyantr/Project_Bravo
 
 2. Install the required libraries.
 

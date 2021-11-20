@@ -1,3 +1,5 @@
+![Rubix Cube ](rubix.png)
+
 # 1.What is this repository ?
 
 Name:- BravoProject 

@@ -3,6 +3,7 @@
 ![Rubix Cube ](readme_media/5.png)
 ![Rubix Cube ](readme_media/6.png)
 ![Rubix Cube ](readme_media/7.png)
+![Rubix Cube ](rubix_center.jpg)
 # 1.What is this repository ?
 
 Name:- BravoProject 

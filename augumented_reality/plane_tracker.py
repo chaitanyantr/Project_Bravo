@@ -15,22 +15,7 @@ flann_params= dict(algorithm = FLANN_INDEX_LSH,
 
 MIN_MATCH_COUNT = 10
 
-'''
-  image     - image to track
-  rect      - tracked rectangle (x1, y1, x2, y2)
-  keypoints - keypoints detected inside rect
-  descrs    - their descriptors
-  data      - some user-provided data
-'''
 PlanarTarget = namedtuple('PlaneTarget', 'image, rect, keypoints, descrs, data')
-
-'''
-  target - reference to PlanarTarget
-  p0     - matched points coords in target image
-  p1     - matched points coords in input frame
-  H      - homography matrix from p0 to p1
-  quad   - target boundary quad in input frame
-'''
 TrackedTarget = namedtuple('TrackedTarget', 'target, p0, p1, H, quad')
 
 class SelectRect:
@@ -149,6 +134,8 @@ class VideoPlayer:
         self.rect = SelectRect("PlaneTracker", self.rect_cb)
     
     def rect_cb(self, rect):
+        cv2.imwrite("./data/result.jpg", self.frame)
+        print(rect)
         self.tracker.add_target(self.frame, rect)
     
     def play(self):

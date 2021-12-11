@@ -1,4 +1,6 @@
 # What is the folder?
+## Rubik's Cube Detection with Contour Area based
+![Rubix Cube ](countour_flow.png)
 ## Load the image
 > img = cv.imread("clear_rubix.jpg")
 ![Rubix Cube ](clear_rubix.jpg)

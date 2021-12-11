@@ -13,3 +13,7 @@
 ![Rubix Cube ](rubix_canny.jpg)
 ## writting a kernel matrix for dialation(this is not dialation step) - input is canny edge image
 > dilated = cv.dilate(canny,ker, iterations=2)
+## Find counoturs
+> (contours, hierarchy) = cv.findContours(dilated.copy(),cv.RETR_TREE,cv.CHAIN_APPROX_SIMPLE)
+![Rubix Cube ](rubix_countour.jpg)                        
+                                         

@@ -1,7 +1,7 @@
 # What is the folder?
 ## Load the image
 > img = cv.imread("clear_rubix.jpg")
-![Rubix Cube ](rubix_center.jpg)
+![Rubix Cube ](clear_rubix.jpg)
 ## convert to gray scale image
 > gray_img = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 ![Rubix Cube ](rubix_grey.jpg)

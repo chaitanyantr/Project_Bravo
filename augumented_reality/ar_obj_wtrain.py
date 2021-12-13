@@ -23,7 +23,7 @@ color = [(0, 255, 255), (0, 255, 255), (0, 255, 255), (0, 255, 255), (0, 255, 25
 
 class VideoPlayer:
     def __init__(self):
-        self.cap = cv2.VideoCapture(-1)
+        self.cap = cv2.VideoCapture(2)
         self.frame = None
         self.tracker = planeTracker()
         

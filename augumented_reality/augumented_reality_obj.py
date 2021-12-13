@@ -41,8 +41,9 @@ class VideoPlayer:
     def play(self):
         # obj = objLoader("./ar_models/fox.obj", filetexture="./ar_models/texture.png", swapyz=True)
         # obj = objLoader("./ar_models/fox.obj", filetexture="./ar_models/fox_texture.png", swapyz=True)
-        obj = objLoader("./ar_models/fox.obj", swapyz=True)
-        # obj = objLoader("./ar_models/rubiks.obj", filetexture="./ar_models/rubiks.png", swapyz=True)
+        # obj = objLoader("./ar_models/fox.obj", swapyz=True)
+        obj = objLoader("./ar_models/rubiks.obj", filetexture="./ar_models/rubiks.png", swapyz=True)
+        # obj = objLoader("./ar_models/spider_man.obj", filetexture="./ar_models/spider_man.png", swapyz=True)
         
         while True:
             if self.rect.tp_rect is None:
@@ -92,6 +93,7 @@ class VideoPlayer:
         
         vertices = obj.vertices
         scale_matrix = np.eye(3)*1
+        # scale_matrix = np.eye(3)*1000
         h, w = image.shape[:2]
         fx = 0.5 + cv2.getTrackbarPos('focal', 'PlaneTracker') / 50.0
         K = np.float64([[fx*w, 0, 0.5*(w-1)],

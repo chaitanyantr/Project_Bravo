@@ -1,5 +1,6 @@
 from filterpy.kalman import KalmanFilter
 import numpy as np
+import time
 
 class IP_KF():
     def __init__(self, init_x, init_y):
@@ -18,6 +19,10 @@ class IP_KF():
         self.H = np.array([                     # measurement matrix
         [1, 0, 0, 0],
         [0, 0, 1, 0]])
+
+        # self.H = np.array([                     # measurement matrix
+        # [1, 0],
+        # [0, 1]])
         
         self.Q = 0.9*np.eye(4, dtype=np.float)  # system error matrix
         self.R = np.array([                     # measurement error matrix
@@ -26,16 +31,89 @@ class IP_KF():
     
         # Kalman filter using filterpy
         
-        self.f = KalmanFilter (dim_x=4, dim_z=2)
-        self.f.x = np.array([[init_x], [0], [init_y], [0]])                         
-        self.f.F = self.F
-        self.f.H = self.H
-        self.f.Q = self.Q
-        self.f.R = self.R
-        self.f.P *= 1000.
+        self.kf = KalmanFilter (dim_x=4, dim_z=2)
+        self.kf.x = np.array([[init_x], [0], [init_y], [0]])                         
+        self.kf.F = self.F
+        self.kf.H = self.H
+        self.kf.Q = self.Q
+        self.kf.R = self.R
+        self.kf.P *= 1000.
+        
+        self.prev_time = 0
         
     def update(self, x, y):
+        # self.dt = 0.001
+        curr_time = time.time()
+        dt = self.prev_time - curr_time
+        self.kf.F = np.array([                     # system matrix
+        [1, dt, 0,  0],
+        [0,  1, 0,  0],
+        [0,  0, 1, dt],
+        [0,  0, 0,  1]], dtype=np.float)
+
+        
         z = np.array([[x], [y]])
-        self.f.predict(self.x, self.P, self.F, self.Q)
-        self.f.update(self.x, self.P, z, self.R, self.H)
-        return self.f.x
+        self.kf.predict()
+        self.kf.update(z)
+        self.prev_time = curr_time
+        return self.kf.x
+    
+class PP_KF():
+    def __init__(self):
+        # states: X=(x,y,z,x˙,y˙,z˙,x¨,y¨,z¨,ψ,θ,ϕ,ψ˙,θ˙,ϕ˙,ψ¨,θ¨,ϕ¨)T
+        
+        dt = 0.001
+        dt2 = 0.5*pow(0.001, 2) 
+        
+        F = [[1, 0, 0, dt,  0,  0, dt2,   0,   0, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 1, 0,  0, dt,  0,   0, dt2,   0, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 1,  0,  0, dt,   0,   0, dt2, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  1,  0,  0,  dt,   0,   0, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  0,  1,  0,   0,  dt,   0, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0, 0,  0,  1,   0,   0,  dt, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  0,  0,  0,   1,   0,   0, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  0,  0,  0,   0,   1,   0, 0, 0, 0 , 0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   1, 0, 0, 0,  0,  0,  0,   0,   0,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 1, 0, 0, dt,  0,  0, dt2,   0,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 1, 0,  0, dt,  0,   0, dt2,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 1,  0,  0, dt,   0,   0, dt2],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 0,  1,  0,  0,  dt,   0,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 0,  0,  1,  0,   0,  dt,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 0,  0,  0,  1,   0,   0,  dt],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 0,  0,  0,  0,   1,   0,   0],
+            [0, 0, 0, 0,  0,  0,   0,   0,   0, 0, 0, 0,  0,  0,  0,   0,   1,   0],
+            [0, 0, 0,  0,  0,  0,   0,   0,   0, 0, 0, 0,  0,  0,  0,   0,   0,   1]]        
+        
+        H =  [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]]
+        
+        Q = 0.999*np.eye(18, dtype=np.float)  # system error matrix
+        R = 0.999*np.eye(6, dtype=np.float)  # system error matrix
+
+        # Kalman filter using filterpy
+        
+        self.kf = KalmanFilter (dim_x=18, dim_z=6)
+        self.kf.x = np.array([[0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0], [0]])                         
+        self.kf.F = np.array(F)
+        self.kf.H = np.array(H)
+        self.kf.Q = np.array(Q)
+        self.kf.R = np.array(R)
+        self.kf.P *= 1000.
+        
+        self.prev_time = 0
+
+
+    def update(self, x, y, z, roll, pitch, yaw):
+        curr_time = time.time()
+        dt = self.prev_time - curr_time
+        # print(x, y, z, roll, pitch, yaw)
+        z = np.array([[x], [y], [z], [roll], [pitch], [yaw]])
+        print(z)
+        self.kf.predict()
+        self.kf.update(z)
+        self.prev_time = curr_time
+        return self.kf.x

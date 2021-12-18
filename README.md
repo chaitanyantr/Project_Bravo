@@ -8,10 +8,7 @@
 > countour with centers detection
 
 ![Rubix Cube ](countour_area/rubix_center.jpg)
-![Rubix Cube ](readme_media/4.png)
-![Rubix Cube ](readme_media/5.png)
-![Rubix Cube ](readme_media/6.png)
-![Rubix Cube ](readme_media/7.png)
+
 
 # 1.What is this repository ?
 

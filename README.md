@@ -3,7 +3,7 @@
 
 > countour detection
 
-![Rubix Cube ](rubix.png)
+<!-- ![Rubix Cube ](rubix.png) -->
 
 > countour with centers detection
 
